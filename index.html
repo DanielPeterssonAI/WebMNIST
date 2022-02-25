@@ -1,17 +1,38 @@
 <head><style>
-  
-  #inputcontainer{
-      border: 2px solid #000;
-      width: max-content;
-  }
-  #input{
-      zoom: 500%;
-      border:0px solid #000000;
-  }
-</style></head>
-<div id = "inputcontainer"><canvas id = "input" width = "28" height = "28"></canvas></div>
-<div id="output"></div>
+    body{
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        margin-left: auto;
+        margin-right: auto;
+        align-items: center;
+        width: 80%
+    }
+    .container{
+        width: max-content;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
 
+    .automargin{
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 5px;
+    }
+
+    #input{
+        zoom: 500%; 
+        border: 1px solid #000;
+    }
+    </style>
+</head>
+    <div class = "container">
+        <div class = "automargin" id = "title">Draw a digit inside the box using your mouse:</div>
+        <canvas class = "automargin" id = "input" width = "28" height = "28"></canvas>
+        <div class = "automargin" id = "output"></div>
+    </div>
 <script>
 function loadXMLDoc(data) {
     var xhttp = new XMLHttpRequest();
@@ -27,8 +48,8 @@ function loadXMLDoc(data) {
     xhttp.send(data);
 }
 
-var c = document.getElementById('input');
-var ctx = c.getContext('2d');
+var c = document.getElementById("input");
+var ctx = c.getContext("2d");
     ctx.fillStyle = "#FFF";
     ctx.fillRect(0, 0, 28, 28);
     ctx.fillStyle = "#000";
@@ -36,9 +57,11 @@ var mouse_x = 0;
 var mouse_y = 0;
 var fire = 0;
 
-input = document.getElementById('input');
+input = document.getElementById("input");
 
 input.addEventListener("mousedown", function(e) {
+    ctx.fillStyle = "#FFF";
+    ctx.fillRect(0, 0, 28, 28);
     fire = 1;
 });
 
@@ -52,11 +75,14 @@ input.addEventListener("mouseup", function(e) {
     loadXMLDoc(data)
 });
 
-input.addEventListener("mousemove", function(e) { 
-    mouse_x = Math.round(e.clientX / 5 - 2);
-    mouse_y = Math.round(e.clientY / 5 - 2);
+input.addEventListener("mousemove", function(e) {
+    var rect = e.target.getBoundingClientRect();
+    mouse_x = Math.round(e.clientX / 5 - rect.left - 3);
+    mouse_y = Math.round(e.clientY / 5 - rect.top - 3);
+
+    ctx.fillStyle = "#000";
     if(fire == 1){
-        ctx.fillRect(mouse_x, mouse_y, 3, 3);
+        ctx.fillRect(mouse_x, mouse_y, 2, 2);
     }
 });
 </script>
