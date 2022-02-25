@@ -1,0 +1,62 @@
+<head><style>
+  
+  #inputcontainer{
+      border: 2px solid #000;
+      width: max-content;
+  }
+  #input{
+      zoom: 500%;
+      border:0px solid #000000;
+  }
+</style></head>
+<div id = "inputcontainer"><canvas id = "input" width = "28" height = "28"></canvas></div>
+<div id="output"></div>
+
+<script>
+function loadXMLDoc(data) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("output").innerHTML =
+            this.responseText;
+        }
+    };
+
+    xhttp.open("POST", "/predict", true);
+    xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhttp.send(data);
+}
+
+var c = document.getElementById('input');
+var ctx = c.getContext('2d');
+    ctx.fillStyle = "#FFF";
+    ctx.fillRect(0, 0, 28, 28);
+    ctx.fillStyle = "#000";
+var mouse_x = 0;
+var mouse_y = 0;
+var fire = 0;
+
+input = document.getElementById('input');
+
+input.addEventListener("mousedown", function(e) {
+    fire = 1;
+});
+
+input.addEventListener("mouseup", function(e) {
+    fire = 0;
+    imgdata = ctx.getImageData(0, 0, 28, 28);
+    data = [];
+    for(let i = 0; i < 28 * 28 * 4; i = i + 4){
+        data += imgdata.data[i] + ',';
+    }
+    loadXMLDoc(data)
+});
+
+input.addEventListener("mousemove", function(e) { 
+    mouse_x = Math.round(e.clientX / 5 - 2);
+    mouse_y = Math.round(e.clientY / 5 - 2);
+    if(fire == 1){
+        ctx.fillRect(mouse_x, mouse_y, 3, 3);
+    }
+});
+</script>
