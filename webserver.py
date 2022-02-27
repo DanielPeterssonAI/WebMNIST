@@ -22,7 +22,7 @@ def predict():
     
     y_pred = model_KNN.predict(data)
 
-    return f"KNN predicted:  {y_pred[0]}"
+    return f"KNN predicted: {y_pred[0]}"
 
 def knn_predictor(x_predict, model):
     return model.predict(x_predict)
